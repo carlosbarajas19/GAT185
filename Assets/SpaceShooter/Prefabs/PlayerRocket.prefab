@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1946817792537103567}
   - component: {fileID: 980560699328850687}
   - component: {fileID: 5077234917388592736}
-  - component: {fileID: 5077234917388592743}
+  - component: {fileID: -8913769740629597458}
   m_Layer: 6
   m_Name: PlayerRocket
   m_TagString: Untagged
@@ -68,7 +68,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathPrefab: {fileID: 7823803454752920799, guid: 2ed77d0c91fc80345ab4e898e6662f0b, type: 3}
   destroyOnDeath: 1
-  maxHealth: 0
+  maxHealth: 50
 --- !u!114 &8410129940599810379
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c3c4652b25c37e46a7bd6ec5c8f4d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 30
+  damage: 50
 --- !u!33 &6333124939453747734
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -160,7 +160,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 3
---- !u!114 &5077234917388592743
+--- !u!114 &-8913769740629597458
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -169,12 +169,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4616210893618698833}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e1ff4e94cc7a2b44a2377ec74dd8171, type: 3}
+  m_Script: {fileID: 11500000, guid: 04dd4f32f523d5e4bb0cc86e5fee27a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathPrefab: {fileID: 0}
-  destroyOnDeath: 1
-  maxHealth: 0
+  destroyTime: 5
 --- !u!1001 &512803446289219757
 PrefabInstance:
   m_ObjectHideFlags: 0

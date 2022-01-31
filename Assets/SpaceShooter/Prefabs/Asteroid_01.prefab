@@ -94,7 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathPrefab: {fileID: 1025285306637258, guid: d8f0099df63275647a8bcf646df1ca00, type: 3}
   destroyOnDeath: 1
-  maxHealth: 10
+  maxHealth: 20
 --- !u!114 &-1651618831417791227
 MonoBehaviour:
   m_ObjectHideFlags: 0
