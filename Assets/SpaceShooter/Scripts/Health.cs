@@ -21,8 +21,10 @@ public class Health : MonoBehaviour
         health -= damage;
         if(health <= 0)
         {
-            if(gameObject.tag == "Enemy") GameManager.Instance.Score += 100;
-
+            if(TryGetComponent<IDestructable>(out IDestructable destructable))
+            {
+                destructable.Destroyed();
+            }
             if (deathPrefab != null)
             {
                 Instantiate(deathPrefab, transform.position, transform.rotation);
