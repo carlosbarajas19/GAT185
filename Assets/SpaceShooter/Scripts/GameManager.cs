@@ -108,7 +108,7 @@ public class GameManager : Singleton<GameManager>
     {
         state = State.PLAYER_START;
         Score = 0;
-        Lives = 3;
+        Lives = 2;
         gameTimer = 0;
         titleScreen.SetActive(false);
         
@@ -123,8 +123,8 @@ public class GameManager : Singleton<GameManager>
 
     public void OnPlayerDead()
     {
-        lives--;
-        if (lives == 0)
+        Lives--;
+        if (Lives == 0)
         {
             state = State.GAME_OVER;
             stateTimer = 5;

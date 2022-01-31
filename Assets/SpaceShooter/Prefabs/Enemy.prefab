@@ -1,35 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4324187804656792392
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4607649559545301400}
-  m_Layer: 7
-  m_Name: WeaponSpawn (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4607649559545301400
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4324187804656792392}
-  m_LocalRotation: {x: -0, y: -0.38274068, z: -0, w: 0.92385584}
-  m_LocalPosition: {x: -5.5, y: 0, z: 2}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 6455541973028383545}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: -45.007, z: 0}
 --- !u!1 &6042854638519508050
 GameObject:
   m_ObjectHideFlags: 0
@@ -60,36 +30,6 @@ Transform:
   m_Father: {fileID: 6455541973028383545}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &6916800420662192064
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4705923450812819349}
-  m_Layer: 7
-  m_Name: WeaponSpawn (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4705923450812819349
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6916800420662192064}
-  m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 5.5, y: 0, z: 2}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 6455541973028383545}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
 --- !u!1001 &6455541973028487159
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -262,7 +202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c3c4652b25c37e46a7bd6ec5c8f4d5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 50
+  damage: 20
 --- !u!114 &-4693292310777650985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,7 +217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spaceWeapon: {fileID: -824730177656047914}
   minFireTime: 1
-  maxFireTime: 3
+  maxFireTime: 1
   points: 100
 --- !u!114 &-824730177656047914
 MonoBehaviour:
@@ -294,8 +234,6 @@ MonoBehaviour:
   projectilePrefab: {fileID: 4616210893618698833, guid: 358ba66cc3969e943a95ad12da7a72c1, type: 3}
   spawnTransforms:
   - {fileID: 5284772302455421275}
-  - {fileID: 4607649559545301400}
-  - {fileID: 4705923450812819349}
   fireRate: 0
 --- !u!114 &26930534
 MonoBehaviour:
