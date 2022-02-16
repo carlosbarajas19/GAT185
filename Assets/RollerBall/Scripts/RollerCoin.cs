@@ -8,5 +8,6 @@ public class RollerCoin : Pickup, IDestructable
     public void Destroyed()
     {
         RollerGameManager.Instance.Score += points;
+        RollerGameManager.Instance.EndScore += points;
     }
 }

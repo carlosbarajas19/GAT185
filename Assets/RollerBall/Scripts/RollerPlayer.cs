@@ -10,6 +10,9 @@ public class RollerPlayer : MonoBehaviour, IDestructable
     [SerializeField] ForceMode forceMode;
     [SerializeField] Transform viewTransform;
 
+    public int maxJumps = 2;
+    public int countJumps { get; set; } = 0;
+    public bool canJump { get; set; } = true;
     Rigidbody rb;
     Vector3 force = Vector3.zero;
 
@@ -22,6 +25,7 @@ public class RollerPlayer : MonoBehaviour, IDestructable
     // Update is called once per frame
     void Update()
     {
+        
         Vector3 direction = Vector3.zero;
 
         direction.x = Input.GetAxis("Horizontal");
@@ -33,10 +37,13 @@ public class RollerPlayer : MonoBehaviour, IDestructable
         //world space
         force = direction * maxForce;
 
-        if(Input.GetButtonDown("Jump"))
+        if(Input.GetButtonDown("Jump") && canJump)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            countJumps++;
+            if (countJumps >= maxJumps) canJump = false;
         }
+       
 
         RollerGameManager.Instance.playerHealth = GetComponent<Health>().health;
 

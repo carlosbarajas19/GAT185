@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59230a32a22cee24096ac4035ff45d74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickupSound: {fileID: 8300000, guid: b91d7126022ddcd418c853b36f25ab72, type: 3}
   amplitude: 0.5
   rate: 8
   spinRate: 360
@@ -65,7 +66,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathPrefab: {fileID: 0}
   destroyOnDeath: 1
-  maxHealth: 100
+  maxHealth: 0
   destroyRoot: 0
 --- !u!135 &525453823715639792
 SphereCollider:

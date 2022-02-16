@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Pickup : MonoBehaviour
 {
+    [SerializeField] AudioClip pickupSound;
     public float amplitude;
     public float rate;
     public float spinRate;
@@ -38,9 +39,11 @@ public class Pickup : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         {
-            if(TryGetComponent<IDestructable>(out IDestructable destructable))
+            if(pickupSound != null) AudioSource.PlayClipAtPoint(pickupSound, transform.position);
+            if (TryGetComponent<IDestructable>(out IDestructable destructable))
             {
                 destructable.Destroyed();
+                
             }
         }
     }

@@ -12,7 +12,8 @@ public class RollerGameManager : Singleton<RollerGameManager>
         PLAYER_START,
         GAME,
         PLAYER_DEAD,
-        GAME_OVER
+        GAME_OVER,
+        GAME_WON
     }
 
     [SerializeField] GameObject playerPrefab;
@@ -21,7 +22,9 @@ public class RollerGameManager : Singleton<RollerGameManager>
 
     [SerializeField] GameObject titleScreen;
     [SerializeField] GameObject gameoverScreen;
+    [SerializeField] GameObject gameWonScreen;
     [SerializeField] TMP_Text scoreUI;
+    [SerializeField] TMP_Text EndScoreUI;
     [SerializeField] TMP_Text livesUI;
     [SerializeField] TMP_Text timeUI;
     [SerializeField] Slider healthBarUI;
@@ -38,6 +41,8 @@ public class RollerGameManager : Singleton<RollerGameManager>
     State state = State.TITLE;
     float stateTimer;
     float gameTime;
+    float timeLimit = 60;
+    public bool gameWon { get; set; } = false;
 
     public int Score
     {
@@ -46,6 +51,15 @@ public class RollerGameManager : Singleton<RollerGameManager>
         {
             score = value;
             scoreUI.text =score.ToString();
+        }
+    }
+
+    public int EndScore
+    {
+        get { return score; }
+        set
+        {
+            EndScoreUI.text = "FINAL SCORE: " + score.ToString();
         }
     }
 
@@ -78,11 +92,12 @@ public class RollerGameManager : Singleton<RollerGameManager>
             case State.TITLE:
                 break;
             case State.PLAYER_START:
+                gameWon = false;
                 DestroyAllEnemies();
                 Instantiate(playerPrefab, playerSpawn.position, playerSpawn.rotation);
                 mainCamera.SetActive(false);
                 startGameEvent?.Invoke();
-                GameTime = 60;
+                GameTime = timeLimit;
 
                 state = State.GAME;
                 break;
@@ -91,22 +106,42 @@ public class RollerGameManager : Singleton<RollerGameManager>
                 if(gameTime <= 0)
                 {
                     GameTime = 0;
-                    state = State.GAME_OVER;
+                    var player = FindObjectOfType<RollerPlayer>();
+                    Destroy(player.transform.root.gameObject);
+                    OnPlayerDead();
+                    stateTimer = 5;
+                }
+                if(gameWon)
+                {
+                    GameTime = 0;
+                    var player = FindObjectOfType<RollerPlayer>();
+                    Destroy(player.transform.root.gameObject);
+                    OnPlayerWon();
                     stateTimer = 5;
                 }
                 break;
             case State.PLAYER_DEAD:
+                mainCamera.SetActive(true);
                 if(stateTimer <= 0)
                 {
-                    mainCamera.SetActive(true);
                     state = State.PLAYER_START;
                 }
                 break;
             case State.GAME_OVER:
-                if(stateTimer <= 0)
+                mainCamera.SetActive(true);
+                if (stateTimer <= 0)
                 {
                     state = State.TITLE;
                     gameoverScreen.SetActive(false);
+                    titleScreen.SetActive(true);
+                }
+                break;
+            case State.GAME_WON:
+                mainCamera.SetActive(true);
+                if (stateTimer <= 0)
+                {
+                    state = State.TITLE;
+                    gameWonScreen.SetActive(false);
                     titleScreen.SetActive(true);
                 }
                 break;
@@ -120,7 +155,7 @@ public class RollerGameManager : Singleton<RollerGameManager>
     {
         state = State.PLAYER_START;
         Score = 0;
-        Lives = 2;
+        Lives = 3;
         gameTime = 0;
         titleScreen.SetActive(false);
         
@@ -148,7 +183,14 @@ public class RollerGameManager : Singleton<RollerGameManager>
             state = State.PLAYER_DEAD;
             stateTimer = 3;
         }
-        stopGameEvent();
+        stopGameEvent?.Invoke();
+    }
+
+    public void OnPlayerWon()
+    {
+        state = State.GAME_WON;
+        gameWonScreen.SetActive(true);
+        stateTimer = 5;
     }
 
     private void DestroyAllEnemies()
