@@ -17,12 +17,13 @@ public class RollerGameManager : Singleton<RollerGameManager>
 
     [SerializeField] GameObject playerPrefab;
     [SerializeField] Transform playerSpawn;
-    [SerializeField] BoxSpawner boxSpawner;
+    [SerializeField] GameObject mainCamera;
 
     [SerializeField] GameObject titleScreen;
     [SerializeField] GameObject gameoverScreen;
     [SerializeField] TMP_Text scoreUI;
     [SerializeField] TMP_Text livesUI;
+    [SerializeField] TMP_Text timeUI;
     [SerializeField] Slider healthBarUI;
 
     public float playerHealth { set { healthBarUI.value = value; } }
@@ -36,7 +37,7 @@ public class RollerGameManager : Singleton<RollerGameManager>
     int lives = 0;
     State state = State.TITLE;
     float stateTimer;
-    float gameTimer;
+    float gameTime;
 
     public int Score
     {
@@ -58,6 +59,16 @@ public class RollerGameManager : Singleton<RollerGameManager>
         }
     }
 
+    public float GameTime
+    {
+        get { return gameTime; }
+        set
+        {
+            gameTime = value;
+            timeUI.text = "<mspace=mspace=36>" + gameTime.ToString("0.00");
+        }
+    }
+
     private void Update()
     {
         stateTimer -= Time.deltaTime;
@@ -67,26 +78,27 @@ public class RollerGameManager : Singleton<RollerGameManager>
             case State.TITLE:
                 break;
             case State.PLAYER_START:
-                //Instantiate(playerPrefab, playerSpawn.position, playerSpawn.rotation);
                 DestroyAllEnemies();
-                startGameEvent();
+                Instantiate(playerPrefab, playerSpawn.position, playerSpawn.rotation);
+                mainCamera.SetActive(false);
+                startGameEvent?.Invoke();
+                GameTime = 60;
 
-                boxSpawner.timeModifier = 1;
                 state = State.GAME;
                 break;
             case State.GAME:
-                gameTimer += Time.deltaTime;
-                if(gameTimer > 5)
+                GameTime -= Time.deltaTime;
+                if(gameTime <= 0)
                 {
-                    gameTimer = 0;
-                    boxSpawner.timeModifier -= 0.1f;
-                    //uses the bigger number between 0.2 and boxSpawner.timeModifier and sets it to boxSpawner.timeModifer
-                    boxSpawner.timeModifier = Mathf.Max(0.2f, boxSpawner.timeModifier);
+                    GameTime = 0;
+                    state = State.GAME_OVER;
+                    stateTimer = 5;
                 }
                 break;
             case State.PLAYER_DEAD:
                 if(stateTimer <= 0)
                 {
+                    mainCamera.SetActive(true);
                     state = State.PLAYER_START;
                 }
                 break;
@@ -109,7 +121,7 @@ public class RollerGameManager : Singleton<RollerGameManager>
         state = State.PLAYER_START;
         Score = 0;
         Lives = 2;
-        gameTimer = 0;
+        gameTime = 0;
         titleScreen.SetActive(false);
         
     }
