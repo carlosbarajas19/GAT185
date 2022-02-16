@@ -17,7 +17,6 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] GameObject playerPrefab;
     [SerializeField] Transform playerSpawn;
-    [SerializeField] BoxSpawner boxSpawner;
 
     [SerializeField] GameObject titleScreen;
     [SerializeField] GameObject gameoverScreen;
@@ -67,11 +66,10 @@ public class GameManager : Singleton<GameManager>
             case State.TITLE:
                 break;
             case State.PLAYER_START:
-                Instantiate(playerPrefab, playerSpawn.position, playerSpawn.rotation);
+                //Instantiate(playerPrefab, playerSpawn.position, playerSpawn.rotation);
                 DestroyAllEnemies();
                 startGameEvent();
 
-                boxSpawner.timeModifier = 1;
                 state = State.GAME;
                 break;
             case State.GAME:
@@ -79,9 +77,7 @@ public class GameManager : Singleton<GameManager>
                 if(gameTimer > 5)
                 {
                     gameTimer = 0;
-                    boxSpawner.timeModifier -= 0.1f;
                     //uses the bigger number between 0.2 and boxSpawner.timeModifier and sets it to boxSpawner.timeModifer
-                    boxSpawner.timeModifier = Mathf.Max(0.2f, boxSpawner.timeModifier);
                 }
                 break;
             case State.PLAYER_DEAD:
@@ -142,10 +138,10 @@ public class GameManager : Singleton<GameManager>
     private void DestroyAllEnemies()
     {
         // destroy all enemies
-        var spaceEnemies = FindObjectsOfType<SpaceEnemy>();
+        /*var spaceEnemies = FindObjectsOfType<SpaceEnemy>();
         foreach (var spaceEnemy in spaceEnemies)
         {
             Destroy(spaceEnemy.gameObject);
-        }
+        }*/
     }
 }
