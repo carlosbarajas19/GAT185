@@ -54,7 +54,7 @@ public class CharacterPlayer : MonoBehaviour
         }
 
         if (Input.GetButtonDown("Fire1")) animator.SetTrigger("throw");
-        if (Input.GetButtonDown("Fire2")) animator.SetTrigger("punch");
+        if (Input.GetButtonDown("Fire2")) animator.SetTrigger("melee");
         if (Input.GetButtonDown("Fire3")) animator.SetBool("isArmed", !animator.GetBool("isArmed"));
 
         animator.SetFloat("speed", (direction * speed).magnitude);
@@ -69,5 +69,17 @@ public class CharacterPlayer : MonoBehaviour
         GUI.color = Color.black;
         GUI.Label(new Rect(screen.x, Screen.height - screen.y, 300, 20), controller.velocity.ToString());
         GUI.Label(new Rect(screen.x, Screen.height - screen.y - 20, 300, 20), controller.isGrounded.ToString());
+    }
+
+    public void LeftFootSpawn(GameObject go)
+    {
+        Transform bone = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
+        Instantiate(go, bone.position, bone.rotation);
+    }
+
+    public void RightFootSpawn(GameObject go)
+    {
+        Transform bone = animator.GetBoneTransform(HumanBodyBones.RightFoot);
+        Instantiate(go, bone.position, bone.rotation);
     }
 }
