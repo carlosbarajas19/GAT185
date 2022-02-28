@@ -13,22 +13,22 @@ public class Bolt : MonoBehaviour
 
     void Update()
     {
-        /*Vector3[] positions = new Vector3[???];
+        Vector3[] positions = new Vector3[segments + 1];
 
-        Vector3 direction = < get direction vector from end to start >;
-        float length = < get length of each segment>;
+        Vector3 direction = end.position - start.position;//< get direction vector from end to start >;
+        float length = direction.magnitude/segments; //< get length of each segment>;
 
-        positions[0] = < set start position>;
-        positions[segments] = < set end position>;
+        positions[0] = start.position;//< set start position>;
+        positions[segments] = end.position;//< set end position>;
 
         for (int i = 1; i < segments; i++)
         {
-            positions[i] = start.position + < normalized direction* length * ???>;
-            positions[i] = positions[i] + < Random inside unit sphere* radius>;
-        }*/
+            positions[i] = start.position + direction.normalized * length * i;//< normalized direction* length * ???>;
+            positions[i] = positions[i] + Random.insideUnitSphere * radius;//< Random inside unit sphere* radius>;
+        }
 
-        //lineRenderer.positionCount = positions.Length;
-        //lineRenderer.SetPositions(positions);
+        lineRenderer.positionCount = positions.Length;
+        lineRenderer.SetPositions(positions);
     }
 }
 
