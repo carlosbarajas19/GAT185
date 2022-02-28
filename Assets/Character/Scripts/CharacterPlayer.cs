@@ -7,37 +7,79 @@ public class CharacterPlayer : MonoBehaviour
 {
     [SerializeField] CharacterController controller;
     [SerializeField] Animator animator;
+    [SerializeField] Transform view;
     [SerializeField] float speed;
     [SerializeField] float jumpForce;
+    [SerializeField] float turnRate;
 
     Vector3 velocity = Vector3.zero;
+    float airTime = 0;
 
-    // Update is called once per frame
     void Update()
     {
-        if(controller.isGrounded && velocity.y < 0)
-        {
-            velocity.y = 0;
-        }
-
+        // xz movement
         Vector3 direction = Vector3.zero;
-
         direction.x = Input.GetAxis("Horizontal");
         direction.z = Input.GetAxis("Vertical");
+        direction = Vector3.ClampMagnitude(direction, 1);
 
-        controller.Move(direction * speed * Time.deltaTime);
+        // convert direction from world space to view space
+        Quaternion viewSpace = Quaternion.AngleAxis(view.rotation.eulerAngles.y, Vector3.up);
+        direction = viewSpace * direction;
 
-        animator.SetFloat("speed", controller.velocity.magnitude);
-        if(controller.velocity.magnitude > 0)
+        // y movement
+        animator.SetBool("isGrounded", controller.isGrounded);
+        if (controller.isGrounded)
         {
-            transform.forward = controller.velocity;
+            airTime = 0;
+            if (velocity.y < 0) velocity.y = 0;
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                velocity.y = jumpForce;
+            }
         }
-
-        if (controller.isGrounded && Input.GetKeyDown(KeyCode.Space))
+        else
         {
-            velocity.y += jumpForce;
+            airTime += Time.deltaTime;
         }
         velocity += Physics.gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+
+        // move character (xyz)
+        controller.Move(((direction * speed) + velocity) * Time.deltaTime);
+
+        // face direction
+        if (direction.magnitude > 0)
+        {
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(direction), turnRate * Time.deltaTime);
+        }
+
+        if (Input.GetButtonDown("Fire1")) animator.SetTrigger("throw");
+        if (Input.GetButtonDown("Fire2")) animator.SetTrigger("melee");
+        if (Input.GetButtonDown("Fire3")) animator.SetBool("isArmed", !animator.GetBool("isArmed"));
+
+        animator.SetFloat("speed", (direction * speed).magnitude);
+        animator.SetFloat("velocityY", velocity.y);
+        animator.SetFloat("airTime", airTime);
+    }
+
+    private void OnGUI()
+    {
+        Vector2 screen = Camera.main.WorldToScreenPoint(transform.position);
+
+        GUI.color = Color.black;
+        GUI.Label(new Rect(screen.x, Screen.height - screen.y, 300, 20), controller.velocity.ToString());
+        GUI.Label(new Rect(screen.x, Screen.height - screen.y - 20, 300, 20), controller.isGrounded.ToString());
+    }
+
+    public void LeftFootSpawn(GameObject go)
+    {
+        Transform bone = animator.GetBoneTransform(HumanBodyBones.LeftFoot);
+        Instantiate(go, bone.position, bone.rotation);
+    }
+
+    public void RightFootSpawn(GameObject go)
+    {
+        Transform bone = animator.GetBoneTransform(HumanBodyBones.RightFoot);
+        Instantiate(go, bone.position, bone.rotation);
     }
 }
