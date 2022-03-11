@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class Game : Singleton<Game>
 {
@@ -15,47 +16,9 @@ public class Game : Singleton<Game>
 		GAME_OVER
 	}
 
-	[SerializeField] TMP_Text scoreUI;
-	[SerializeField] TMP_Text livesUI;
-	[SerializeField] TMP_Text timeUI;
-	[SerializeField] Slider healthUI;
-
-	[SerializeField] AudioClip musicClip;
-
-	public float health { set { healthUI.value = value; } }
-
-	int score = 0;
-	public int Score
-	{
-		get { return score; }
-		set
-		{
-			score = value;
-			scoreUI.text = score.ToString("D2");
-		}
-	}
-
-	int lives = 0;
-	public int Lives
-	{
-		get { return lives; }
-		set
-		{
-			lives = value;
-			livesUI.text = lives.ToString();
-		}
-	}
-
-	float gameTime = 0;
-	public float GameTime
-	{
-		get { return gameTime; }
-		set
-		{
-			gameTime = value;
-			timeUI.text = "<mspace=mspace=36>" + gameTime.ToString("0.0") + "</mspace>";
-		}
-	}
+	[SerializeField] ScreenFade screenFade;
+	[SerializeField] SceneLoader sceneLoader;
+	public GameData gameData;
 
 	State state = State.TITLE;
 	int highScore;
@@ -69,8 +32,18 @@ public class Game : Singleton<Game>
 		//PlayerPrefs.DeleteAll();
 		//PlayerPrefs.DeleteKey("highscore");
 
-		AudioManager.Instance.PlayMusic(musicClip);
+		InitScene();
+		SceneManager.activeSceneChanged += OnSceneWasLoaded;
 	}
+
+	void InitScene()
+    {
+		SceneDescriptor sceneDescriptor = FindObjectOfType<SceneDescriptor>();
+		if(sceneDescriptor != null)
+        {
+			Instantiate(sceneDescriptor.player, sceneDescriptor.playerSpawn.position, sceneDescriptor.playerSpawn.rotation);
+        }
+    }
 
 	private void Update()
 	{
@@ -90,4 +63,30 @@ public class Game : Singleton<Game>
 				break;
 		}
 	}
+
+	public void OnLoadScene(string sceneName)
+    {
+		sceneLoader.Load(sceneName);
+
+	}
+
+	public void OnPlayerDead()
+    {
+		gameData.intData["Lives"]--;
+
+		if(gameData.intData["Lives"] == 0)
+        {
+			OnLoadScene("MainMenu");
+		}
+        else
+        {
+			OnLoadScene(SceneManager.GetActiveScene().name);
+		}
+    }
+
+	void OnSceneWasLoaded(Scene current, Scene next)
+    {
+		InitScene();
+
+    }
 }

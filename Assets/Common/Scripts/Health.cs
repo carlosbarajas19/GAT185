@@ -10,6 +10,7 @@ public class Health : MonoBehaviour
     [SerializeField] bool destroyRoot = false;
 
     public float health { get; set; }
+    bool isDead = false;
 
     // Start is called before the first frame update
     void Start()
@@ -20,8 +21,9 @@ public class Health : MonoBehaviour
     public void Damage(float damage)
     {
         health -= damage;
-        if(health <= 0)
+        if(!isDead && health <= 0)
         {
+            isDead = true;
             if(TryGetComponent<IDestructable>(out IDestructable destructable))
             {
                 destructable.Destroyed();
