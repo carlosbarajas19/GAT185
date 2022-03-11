@@ -53,11 +53,11 @@ public class Fader : MonoBehaviour
 
     IEnumerator Timer(float time)
     {
-        print("Hello");
+        //print("Hello");
         yield return new WaitForSeconds(time);
-        print("World");
+        //print("World");
         yield return new WaitForSeconds(time);
-        print("Goodbye");
+        //print("Goodbye");
 
 
     }
@@ -66,7 +66,7 @@ public class Fader : MonoBehaviour
     {
         for(;;) //essentially equal to while(true)
         {
-            print("thinking...");
+            //print("thinking...");
             yield return new WaitForSeconds(time);
         }
     }

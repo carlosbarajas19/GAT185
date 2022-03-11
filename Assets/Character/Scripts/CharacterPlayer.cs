@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class CharacterPlayer : MonoBehaviour
+public class CharacterPlayer : MonoBehaviour, IDestructable
 {
     [SerializeField] CharacterController controller;
     [SerializeField] Animator animator;
@@ -14,6 +14,13 @@ public class CharacterPlayer : MonoBehaviour
 
     Vector3 velocity = Vector3.zero;
     float airTime = 0;
+
+    void Start()
+    {
+        view = (view == null) ? Camera.main.transform : view;
+        float health = GetComponent<Health>().health;
+        Game.Instance.gameData.Load("Health", ref health);
+    }
 
     void Update()
     {
@@ -53,22 +60,12 @@ public class CharacterPlayer : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(direction), turnRate * Time.deltaTime);
         }
 
-        if (Input.GetButtonDown("Fire1")) animator.SetTrigger("throw");
-        if (Input.GetButtonDown("Fire2")) animator.SetTrigger("melee");
-        if (Input.GetButtonDown("Fire3")) animator.SetBool("isArmed", !animator.GetBool("isArmed"));
-
         animator.SetFloat("speed", (direction * speed).magnitude);
         animator.SetFloat("velocityY", velocity.y);
         animator.SetFloat("airTime", airTime);
-    }
 
-    private void OnGUI()
-    {
-        Vector2 screen = Camera.main.WorldToScreenPoint(transform.position);
-
-        GUI.color = Color.black;
-        GUI.Label(new Rect(screen.x, Screen.height - screen.y, 300, 20), controller.velocity.ToString());
-        GUI.Label(new Rect(screen.x, Screen.height - screen.y - 20, 300, 20), controller.isGrounded.ToString());
+        Game.Instance.gameData.Save("Health", GetComponent<Health>().health);
+        
     }
 
     public void LeftFootSpawn(GameObject go)
@@ -81,5 +78,10 @@ public class CharacterPlayer : MonoBehaviour
     {
         Transform bone = animator.GetBoneTransform(HumanBodyBones.RightFoot);
         Instantiate(go, bone.position, bone.rotation);
+    }
+
+    public void Destroyed()
+    {
+        Game.Instance.OnPlayerDead();
     }
 }

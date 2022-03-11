@@ -9,9 +9,9 @@ public class AudioManager : Singleton<AudioManager>
     [SerializeField] AudioSource musicAudioSource;
     [SerializeField] AudioSource sfxAudioSource;
 
-    static readonly string MASTER_VOLUME = "MasterVolume";
-    static readonly string SFX_VOLUME = "SFXVolume";
-    static readonly string MUSIC_VOLUME = "MusicVolume";
+    const string MASTER_VOLUME = "MasterVolume";
+    const string SFX_VOLUME = "SFXVolume";
+    const string MUSIC_VOLUME = "MusicVolume";
 
     public float masterVolume
     {
@@ -27,8 +27,6 @@ public class AudioManager : Singleton<AudioManager>
             PlayerPrefs.SetFloat(MASTER_VOLUME, value);
         }
     }
-
-
 
     public float sfxVolume
     {
@@ -64,9 +62,9 @@ public class AudioManager : Singleton<AudioManager>
 
     void Start()
     {
-        masterVolume = PlayerPrefs.GetFloat(MASTER_VOLUME, 0);
-        sfxVolume = PlayerPrefs.GetFloat(SFX_VOLUME, 0);
-        musicVolume = PlayerPrefs.GetFloat(MUSIC_VOLUME, 0);
+        masterVolume = PlayerPrefs.GetFloat(MASTER_VOLUME, 1);
+        sfxVolume = PlayerPrefs.GetFloat(SFX_VOLUME, 1);
+        musicVolume = PlayerPrefs.GetFloat(MUSIC_VOLUME, 1);
     }
 
     public void PlaySFX(AudioClip clip)
