@@ -5,12 +5,13 @@ using UnityEngine;
 public class Damage : MonoBehaviour
 {
     [SerializeField] float damage = 0;
+    [SerializeField] string ignoreTag;
     [SerializeField] bool oneTime = true;
 
     private void OnTriggerEnter(Collider other)
     {
         if (!oneTime) return;
-
+        if (other.tag == ignoreTag) return;
         if(other.gameObject.TryGetComponent<Health>(out Health health))
         {
             health.Damage(damage);
@@ -24,8 +25,9 @@ public class Damage : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         if (oneTime) return;
+        if (other.tag == ignoreTag) return;
 
-        if(other.gameObject.TryGetComponent<Health>(out Health health))
+        if (other.gameObject.TryGetComponent<Health>(out Health health))
         {
             health.Damage(damage * Time.deltaTime);
         }
@@ -34,7 +36,7 @@ public class Damage : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         if (!oneTime) return;
-
+        if (other.gameObject.tag == ignoreTag) return;
         if (other.gameObject.TryGetComponent<Health>(out Health health))
         {
             health.Damage(damage);

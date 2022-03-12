@@ -76,6 +76,7 @@ public class Game : Singleton<Game>
 
 		if(gameData.intData["Lives"] == 0)
         {
+			gameData.intData["Lives"] = 3;
 			OnLoadScene("MainMenu");
 		}
         else

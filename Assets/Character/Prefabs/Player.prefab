@@ -2672,6 +2672,7 @@ MonoBehaviour:
   animator: {fileID: 8628719311762509132}
   view: {fileID: 0}
   speed: 2
+  sprintMultiplier: 2
   jumpForce: 5
   turnRate: 2
 --- !u!114 &3032226601617444239

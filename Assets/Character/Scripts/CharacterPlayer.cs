@@ -9,6 +9,7 @@ public class CharacterPlayer : MonoBehaviour, IDestructable
     [SerializeField] Animator animator;
     [SerializeField] Transform view;
     [SerializeField] float speed;
+    [SerializeField][Range(1,20)] float sprintMultiplier;
     [SerializeField] float jumpForce;
     [SerializeField] float turnRate;
 
@@ -17,6 +18,7 @@ public class CharacterPlayer : MonoBehaviour, IDestructable
 
     void Start()
     {
+        if (Game.Instance.gameData.intData["Lives"] == 0) Game.Instance.gameData.intData["Lives"] = 3;
         view = (view == null) ? Camera.main.transform : view;
         float health = GetComponent<Health>().health;
         Game.Instance.gameData.Load("Health", ref health);
@@ -52,15 +54,19 @@ public class CharacterPlayer : MonoBehaviour, IDestructable
         velocity += Physics.gravity * Time.deltaTime;
 
         // move character (xyz)
-        controller.Move(((direction * speed) + velocity) * Time.deltaTime);
-
+        float speedMulti = 1;
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            speedMulti = sprintMultiplier;
+        }
+        controller.Move(((direction * speed * speedMulti) + velocity) * Time.deltaTime);
         // face direction
         if (direction.magnitude > 0)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(direction), turnRate * Time.deltaTime);
         }
 
-        animator.SetFloat("speed", (direction * speed).magnitude);
+        animator.SetFloat("speed", (direction * speed * speedMulti).magnitude);
         animator.SetFloat("velocityY", velocity.y);
         animator.SetFloat("airTime", airTime);
 
@@ -82,6 +88,7 @@ public class CharacterPlayer : MonoBehaviour, IDestructable
 
     public void Destroyed()
     {
+        animator.SetBool("isDead", true);
         Game.Instance.OnPlayerDead();
     }
 }
